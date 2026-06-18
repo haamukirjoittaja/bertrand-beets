@@ -1,0 +1,5 @@
+# macOS
+.DS_Store
+
+# Local tooling (preview server config) — not needed on the host
+.claude/

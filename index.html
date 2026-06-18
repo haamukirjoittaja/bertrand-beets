@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bertrand Beets — bespoke audio production, mixing, and sound design for record labels, game studios, and premier sample libraries.">
+
+  <title>Bertrand Beets — Music Production & Sound Design</title>
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Bertrand Beets — Music Production & Sound Design">
+  <meta property="og:description" content="High-fidelity music production, dynamic arrangements, and expert sound design.">
+  <meta property="og:image" content="images/logo-beet.png">
+  <meta name="theme-color" content="#f3eee7">
+
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            // Light editorial theme. Token names kept for class compatibility:
+            //   charcoal* = warm light SURFACES   cream* = warm dark INK
+            charcoal: { DEFAULT: '#f3eee7', light: '#ece4d9', lighter: '#e2d8ca' },
+            cream:    { DEFAULT: '#2a2521', muted: '#6f655b', dim: '#9c9286' },
+            beet:     { DEFAULT: '#5c2e3a', hover: '#7a3d4d', subtle: 'rgba(92, 46, 58, 0.12)' },
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    .fade-target { opacity: 0; }
+    .fade-target.is-visible { animation: fadeUp 1s ease-out forwards; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Subtle grain texture overlay */
+    .grain::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.02;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      z-index: 50;
+    }
+
+    a:focus-visible, button:focus-visible {
+      outline: 1px solid #5c2e3a;
+      outline-offset: 4px;
+    }
+
+    .nav-blur { backdrop-filter: saturate(140%) blur(10px); -webkit-backdrop-filter: saturate(140%) blur(10px); }
+
+    /* ---- Mini-DAW ---- */
+    .daw-lane { background:
+      repeating-linear-gradient(90deg, rgba(42,37,33,0.06) 0 1px, transparent 1px 100%) 0 0 / 6.25% 100%;
+    }
+    .daw-cell { flex: 1 1 0; border-radius: 1px; align-self: flex-end; transition: opacity .15s; }
+    .daw-fader { -webkit-appearance: none; appearance: none; height: 3px; border-radius: 3px; background: #d8cfc2; outline: none; }
+    .daw-fader::-webkit-slider-thumb { -webkit-appearance: none; width: 11px; height: 11px; border-radius: 50%; background: #5c2e3a; cursor: pointer; }
+    .daw-fader::-moz-range-thumb { width: 11px; height: 11px; border: none; border-radius: 50%; background: #5c2e3a; cursor: pointer; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fade-target { opacity: 1 !important; animation: none !important; }
+    }
+  </style>
+</head>
+
+<body class="grain bg-charcoal text-cream font-sans antialiased selection:bg-beet-subtle selection:text-cream">
+
+  <a href="#work" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:bg-charcoal-light focus:px-4 focus:py-2 focus:text-sm">Skip to work</a>
+
+  <!-- Sticky Nav -->
+  <header class="sticky top-0 z-40 w-full border-b border-cream/5 bg-charcoal/70 nav-blur">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4 sm:px-10 lg:px-16">
+      <a href="#top" class="group flex items-center gap-3 transition-opacity duration-300 hover:opacity-80" aria-label="Bertrand Beets — Home">
+        <img src="images/logo-beet.png" alt="Bertrand Beets" class="h-10 w-auto sm:h-11" width="44" height="45">
+        <span class="hidden text-sm font-light tracking-[0.2em] uppercase text-cream-muted sm:inline">Bertrand Beets</span>
+      </a>
+      <nav class="flex items-center gap-6 text-xs font-light uppercase tracking-[0.18em] text-cream-muted sm:gap-8 sm:text-sm">
+        <a href="#work" class="hidden transition-colors duration-300 hover:text-cream sm:inline">Stems</a>
+        <a href="#listen" class="hidden transition-colors duration-300 hover:text-cream sm:inline">Listen</a>
+        <a href="#contact" class="transition-colors duration-300 hover:text-cream">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <span id="top"></span>
+
+  <!-- Hero -->
+  <main class="flex items-center px-6 py-20 sm:px-10 sm:py-28 lg:px-16">
+    <div class="mx-auto w-full max-w-3xl">
+      <img src="images/logo-beet.png" alt="" aria-hidden="true" class="fade-target mb-8 h-24 w-auto sm:h-28" data-delay="50">
+      <div class="fade-target mb-10 h-px w-12 bg-beet/40 sm:mb-12" data-delay="100" aria-hidden="true"></div>
+
+      <h1 class="fade-target font-serif text-[2.25rem] font-medium leading-[1.15] tracking-tight text-cream sm:text-5xl md:text-[3.25rem] lg:text-6xl" data-delay="200">
+        Bespoke Audio.<br>
+        <span class="text-cream-muted">Uncompromising Quality.</span>
+      </h1>
+
+      <p class="fade-target mt-8 max-w-xl text-base font-light leading-relaxed text-cream-muted sm:mt-10 sm:text-lg sm:leading-relaxed" data-delay="400">
+        Delivering high-fidelity music production, dynamic arrangements, and expert sound design. Specialized in crafting pristine, direct rhythm sections and detailed sonic landscapes for record labels, game studios, and premier sample libraries.
+      </p>
+
+      <div class="fade-target mt-12 flex flex-wrap items-center gap-4 sm:mt-14" data-delay="600">
+        <a href="#work" class="group inline-flex items-center gap-3 border border-cream/10 bg-charcoal-light px-7 py-3.5 text-sm font-normal tracking-wide text-cream transition-all duration-300 hover:border-beet/40 hover:bg-beet-subtle sm:px-8 sm:py-4 sm:text-base">
+          <span>Open the stem player</span>
+          <svg class="h-4 w-4 text-cream-dim transition-all duration-300 group-hover:translate-y-0.5 group-hover:text-beet-hover" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25 12 15.75 4.5 8.25" />
+          </svg>
+        </a>
+        <a href="#contact" class="text-sm font-light tracking-wide text-cream-muted underline-offset-4 transition-colors duration-300 hover:text-cream hover:underline sm:text-base">
+          Start a project &rarr;
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mini-DAW / Stem Player -->
+  <section id="work" class="scroll-mt-24 px-6 py-16 sm:px-10 sm:py-24 lg:px-16">
+    <div class="mx-auto w-full max-w-5xl">
+
+      <div class="fade-target mb-10 flex items-end justify-between gap-6 sm:mb-12" data-delay="0">
+        <div>
+          <p class="mb-3 text-xs font-light uppercase tracking-[0.25em] text-beet-hover">Inside the mix</p>
+          <h2 class="font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl md:text-5xl">Stem Player</h2>
+        </div>
+        <p class="hidden max-w-xs text-sm font-light leading-relaxed text-cream-dim md:block">
+          One song, broken into its stems. Mute and solo each layer to hear how it's built.
+        </p>
+      </div>
+
+      <!-- DAW panel -->
+      <div class="fade-target border border-cream/10 bg-charcoal-light/60" data-delay="100">
+
+        <!-- Transport -->
+        <div class="flex flex-wrap items-center gap-4 border-b border-cream/10 px-5 py-4 sm:px-6">
+          <button id="daw-play" type="button" aria-label="Play"
+            class="group flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-beet/50 bg-beet/20 text-cream transition-all duration-300 hover:border-beet-hover hover:bg-beet/40">
+            <svg id="daw-icon-play" class="ml-0.5 h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="daw-icon-pause" class="hidden h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+          </button>
+
+          <button id="daw-stop" type="button" aria-label="Stop and rewind"
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-cream/10 text-cream-muted transition-colors hover:border-cream/30 hover:text-cream">
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+          </button>
+
+          <div class="min-w-0 flex-1">
+            <p class="truncate font-serif text-lg text-cream sm:text-xl">Soul Beets <span class="text-cream-dim text-sm font-sans font-light">— stems</span></p>
+            <p class="truncate text-xs font-light text-cream-dim" id="daw-engine">Loading…</p>
+          </div>
+
+          <p class="shrink-0 font-mono text-sm text-cream-muted"><span id="daw-cur">0:00</span> <span class="text-cream-dim">/ <span id="daw-len">0:00</span></span></p>
+        </div>
+
+        <!-- Bar ruler -->
+        <div class="flex pl-[150px] pr-4 sm:pl-[176px] sm:pr-6">
+          <div id="daw-ruler" class="flex flex-1 py-2 text-[10px] font-mono text-cream-dim/60"></div>
+        </div>
+
+        <!-- Tracks -->
+        <div id="daw-tracks" class="relative px-4 pb-4 sm:px-6 sm:pb-6"></div>
+      </div>
+
+      <p class="mt-5 text-xs font-light leading-relaxed text-cream-dim/70">
+        &ldquo;Soul Beets&rdquo; &mdash; an 8-bar loop at 93&nbsp;BPM in B&#9837;&nbsp;minor, playing from five real stems in <code class="text-cream-dim">audio/</code>.
+        Mute and solo each lane to hear how the track is layered; every lane stays sample-locked to the others.
+      </p>
+    </div>
+  </section>
+
+  <!-- Listen elsewhere / streaming -->
+  <section id="listen" class="scroll-mt-24 border-y border-cream/5 bg-charcoal-light/30 px-6 py-16 sm:px-10 sm:py-24 lg:px-16">
+    <div class="mx-auto w-full max-w-5xl">
+      <div class="fade-target mb-12 sm:mb-16" data-delay="0">
+        <p class="mb-3 text-xs font-light uppercase tracking-[0.25em] text-beet-hover">Streaming</p>
+        <h2 class="font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl md:text-5xl">Find me elsewhere</h2>
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div class="fade-target flex min-h-[180px] flex-col justify-between border border-cream/10 bg-charcoal/60 p-6" data-delay="100">
+          <div class="flex items-center gap-3 text-cream-muted">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm4.59 14.43a.62.62 0 0 1-.86.21c-2.35-1.44-5.3-1.76-8.79-.96a.62.62 0 1 1-.28-1.22c3.81-.87 7.08-.5 9.72 1.11.3.18.39.57.21.86Zm1.22-2.72a.78.78 0 0 1-1.07.26c-2.69-1.65-6.79-2.13-9.97-1.16a.78.78 0 1 1-.45-1.49c3.63-1.1 8.15-.57 11.24 1.32.36.23.48.71.25 1.07Zm.11-2.84C14.8 8.96 9.3 8.77 6.16 9.72a.94.94 0 1 1-.54-1.8c3.6-1.09 9.67-.88 13.48 1.39a.94.94 0 1 1-.96 1.62Z"/></svg>
+            <span class="text-sm tracking-wide">Spotify</span>
+          </div>
+          <p class="mt-4 text-sm font-light leading-relaxed text-cream-dim">
+            Paste a Spotify artist or playlist embed here.
+            <span class="mt-2 block font-mono text-[11px] text-cream-dim/60">&lt;iframe src="https://open.spotify.com/embed/…"&gt;</span>
+          </p>
+          <a href="#" class="mt-5 inline-flex items-center gap-2 self-start text-sm text-cream-muted transition-colors hover:text-cream">Open profile <span aria-hidden="true">&rarr;</span></a>
+        </div>
+
+        <div class="fade-target flex min-h-[180px] flex-col justify-between border border-cream/10 bg-charcoal/60 p-6" data-delay="200">
+          <div class="flex items-center gap-3 text-cream-muted">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M1.5 14.5a.5.5 0 0 0 .5.5h.5v-4a.5.5 0 0 0-1 0v3Zm2 1h.5a.5.5 0 0 0 .5-.5v-5a.5.5 0 0 0-1 0v5Zm2 0h.5a.5.5 0 0 0 .5-.5V9a.5.5 0 0 0-1 0v6Zm2 0h.5a.5.5 0 0 0 .5-.5V8.5a.5.5 0 0 0-1 0V15Zm2.5.5a.5.5 0 0 0 .5-.5V8a.5.5 0 0 0-1 0v7a.5.5 0 0 0 .5.5ZM14 15.5a4 4 0 0 0 .5-7.97V7a5.5 5.5 0 0 1 5.46 5h.54a3 3 0 0 1 0 6h-6.5a.5.5 0 0 1 0-1Z"/></svg>
+            <span class="text-sm tracking-wide">SoundCloud</span>
+          </div>
+          <p class="mt-4 text-sm font-light leading-relaxed text-cream-dim">
+            Paste a SoundCloud track or set embed here.
+            <span class="mt-2 block font-mono text-[11px] text-cream-dim/60">&lt;iframe src="https://w.soundcloud.com/player/…"&gt;</span>
+          </p>
+          <a href="#" class="mt-5 inline-flex items-center gap-2 self-start text-sm text-cream-muted transition-colors hover:text-cream">Open profile <span aria-hidden="true">&rarr;</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="scroll-mt-24 px-6 py-20 sm:px-10 sm:py-28 lg:px-16">
+    <div class="mx-auto w-full max-w-3xl text-center">
+      <div class="fade-target mx-auto mb-10 h-px w-12 bg-beet/40" data-delay="0" aria-hidden="true"></div>
+      <h2 class="fade-target font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl md:text-5xl" data-delay="100">
+        Let's make something <span class="text-cream-muted">that lands.</span>
+      </h2>
+      <p class="fade-target mx-auto mt-6 max-w-lg text-base font-light leading-relaxed text-cream-muted" data-delay="200">
+        Record labels, game studios, sample-library partners — tell me about the project and the sound you're chasing.
+      </p>
+      <div class="fade-target mt-10" data-delay="300">
+        <a href="mailto:contact@bertrandbeets.com"
+          class="group inline-flex items-center gap-3 border border-cream/10 bg-charcoal-light px-7 py-3.5 text-sm font-normal tracking-wide text-cream transition-all duration-300 hover:border-beet/40 hover:bg-beet-subtle sm:px-8 sm:py-4 sm:text-base">
+          <span>contact@bertrandbeets.com</span>
+          <svg class="h-4 w-4 text-cream-dim transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-beet-hover" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="px-6 pb-10 sm:px-10 lg:px-16">
+    <div class="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 border-t border-cream/5 pt-8 sm:flex-row">
+      <p class="text-xs font-light tracking-wider text-cream-dim">&copy; <span id="year"></span> Bertrand Beets</p>
+      <p class="text-xs font-light tracking-wider text-cream-dim/60">Music Production &amp; Sound Design</p>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    'use strict';
+
+    /* =============================================================
+       MINI-DAW STEM PLAYER
+       -------------------------------------------------------------
+       One song, five stem lanes. Each lane has mute / solo / volume.
+       Two engines, chosen automatically:
+         • "buffer"  — if every track has a real `src` audio file
+                       (drop files in stems/ and fill in `src`).
+         • "synth"   — fallback: stems are generated live in-browser,
+                       so the demo is fully playable with no files.
+       ============================================================= */
+
+    var TRACKS = [
+      { id: 'drums', name: 'Drums',  accent: '#8f3a48', src: 'audio/soul_man_drums_93bpm_Bbmin.m4a' },
+      { id: 'bass',  name: 'Bass',   accent: '#a85a3c', src: 'audio/soul_man_bass_93bpm_Bbmin.m4a'  },
+      { id: 'pad',   name: 'Synths', accent: '#6d5688', src: 'audio/soul_man_synth_93bpm_Bbmin.m4a' },
+      { id: 'keys',  name: 'Keys',   accent: '#4e7d69', src: 'audio/soul_man_keys_93bpm_Bbmin.m4a'  },
+      { id: 'vocal', name: 'Vocals', accent: '#a87c38', src: 'audio/soul_man_vocal_93bpm_Bbmin.m4a' },
+    ];
+
+    // ---- Musical grid (4-bar loop, Am – F – C – G) ----
+    var BPM = 93;
+    var STEP = (60 / BPM) / 4;        // 16th-note duration (s)
+    var STEPS_PER_BAR = 16;
+    var BARS = 8;
+    var TOTAL_STEPS = STEPS_PER_BAR * BARS;
+    var SONG_LEN = TOTAL_STEPS * STEP;  // synth-mode loop length
+
+    var CHORDS = [
+      { bass: 45, pad: [57, 60, 64], lead: [69, 72, 76] }, // Am
+      { bass: 41, pad: [53, 57, 60], lead: [65, 69, 72] }, // F
+      { bass: 48, pad: [60, 64, 67], lead: [72, 76, 79] }, // C
+      { bass: 43, pad: [55, 59, 62], lead: [67, 71, 74] }, // G
+    ];
+
+    function mtof(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+
+    // Static clip intensities (0..1) per step, for the lane visuals.
+    function clipFor(id) {
+      var a = new Array(TOTAL_STEPS).fill(0);
+      for (var g = 0; g < TOTAL_STEPS; g++) {
+        var s = g % STEPS_PER_BAR;
+        if (id === 'drums') {
+          if (s % 4 === 0) a[g] = 1;            // kick
+          if (s === 4 || s === 12) a[g] = 0.9;  // snare
+          if (s % 4 === 2) a[g] = Math.max(a[g], 0.45); // hat
+        } else if (id === 'bass') {
+          if (s === 0) a[g] = 0.95; else if (s === 8) a[g] = 0.75; else if (s === 14) a[g] = 0.5;
+        } else if (id === 'pad') {
+          a[g] = 0.4; if (s === 0) a[g] = 0.8;  // sustained block
+        } else if (id === 'keys') {
+          if (s % 2 === 0) a[g] = 0.55;
+        } else if (id === 'vocal') {
+          if (s === 0 || s === 12) a[g] = 0.7; else if (s === 6) a[g] = 0.6; else if (s === 10) a[g] = 0.65;
+        }
+      }
+      return a;
+    }
+
+    // ---- DOM ----
+    var qs = function (s) { return document.querySelector(s); };
+    var playBtn = qs('#daw-play'), stopBtn = qs('#daw-stop');
+    var iconPlay = qs('#daw-icon-play'), iconPause = qs('#daw-icon-pause');
+    var elCur = qs('#daw-cur'), elLen = qs('#daw-len'), elEngine = qs('#daw-engine');
+    var rulerEl = qs('#daw-ruler'), tracksEl = qs('#daw-tracks');
+
+    // ---- Audio state ----
+    var ctx = null, master = null, noiseBuf = null;
+    var engine = 'synth';
+    var isPlaying = false;
+    var startTime = 0;      // ctx time aligned to position 0
+    var pausedPos = 0;      // position when paused/stopped
+    var songLen = SONG_LEN;
+    var activeEnvs = [];     // synth env-gain nodes (for clean stop)
+    var schedTimer = null, nextStepTime = 0, stepCounter = 0;
+    var rafId = null;
+    var laneRef = null, lanesWrap = null, playhead = null;
+
+    // ---------- Build UI ----------
+    function buildRuler() {
+      for (var b = 0; b < BARS; b++) {
+        var d = document.createElement('div');
+        d.className = 'flex-1 border-l border-cream/10 pl-1.5';
+        d.textContent = (b + 1);
+        rulerEl.appendChild(d);
+      }
+    }
+
+    function buildTracks() {
+      lanesWrap = document.createElement('div');
+      lanesWrap.className = 'relative';
+
+      TRACKS.forEach(function (t) {
+        t.muted = false; t.soloed = false; t.volume = 0.9; t.meter = 0; t.audible = true;
+        t.clip = clipFor(t.id);
+
+        var row = document.createElement('div');
+        row.className = 'flex items-stretch gap-3 py-2';
+
+        // --- Header (controls) ---
+        var head = document.createElement('div');
+        head.className = 'flex w-[138px] shrink-0 flex-col justify-center gap-1.5 sm:w-[164px]';
+        head.innerHTML =
+          '<div class="flex items-center gap-2">' +
+            '<span class="h-2.5 w-2.5 shrink-0 rounded-full" style="background:' + t.accent + '"></span>' +
+            '<span class="truncate text-sm text-cream">' + t.name + '</span>' +
+            '<span class="ml-auto flex gap-1">' +
+              '<button type="button" data-act="mute" class="h-6 w-6 rounded border border-cream/15 text-[11px] font-medium text-cream-dim transition-colors" title="Mute">M</button>' +
+              '<button type="button" data-act="solo" class="h-6 w-6 rounded border border-cream/15 text-[11px] font-medium text-cream-dim transition-colors" title="Solo">S</button>' +
+            '</span>' +
+          '</div>' +
+          '<div class="flex items-center gap-2">' +
+            '<svg class="h-3 w-3 shrink-0 text-cream-dim" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 10v4h4l5 5V5L7 10H3Zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4Z"/></svg>' +
+            '<input type="range" min="0" max="1" step="0.01" value="0.9" class="daw-fader w-full" data-act="vol" aria-label="' + t.name + ' volume">' +
+          '</div>';
+
+        // --- Lane (clip + meter) ---
+        var lane = document.createElement('div');
+        lane.className = 'daw-lane relative flex-1 overflow-hidden rounded-sm border border-cream/5 bg-charcoal/50';
+
+        var clip = document.createElement('div');
+        clip.className = 'flex h-12 items-end gap-px px-1 pb-1 pt-2 sm:h-14';
+        // Cells are filled later: real waveform peaks (buffer mode) or the
+        // synth pattern (fallback). See fillCells / renderWaveforms.
+        // level meter strip
+        var meterWrap = document.createElement('div');
+        meterWrap.className = 'absolute bottom-0 left-0 h-[3px] w-full bg-cream/5';
+        var meter = document.createElement('div');
+        meter.className = 'h-full w-0';
+        meter.style.background = t.accent;
+        meterWrap.appendChild(meter);
+
+        lane.appendChild(clip);
+        lane.appendChild(meterWrap);
+
+        row.appendChild(head);
+        row.appendChild(lane);
+        lanesWrap.appendChild(row);
+
+        // refs
+        t.el = { mute: head.querySelector('[data-act=mute]'), solo: head.querySelector('[data-act=solo]'),
+                 vol: head.querySelector('[data-act=vol]'), meter: meter, lane: lane, clip: clip };
+        if (!laneRef) laneRef = lane;
+
+        t.el.mute.addEventListener('click', function () { t.muted = !t.muted; if (t.muted) t.soloed = false; applyGains(); });
+        t.el.solo.addEventListener('click', function () { t.soloed = !t.soloed; if (t.soloed) t.muted = false; applyGains(); });
+        t.el.vol.addEventListener('input', function () { t.volume = parseFloat(t.el.vol.value); applyGains(); });
+        lane.addEventListener('click', function (e) { seekFromLane(e, lane); });
+      });
+
+      // Playhead overlay
+      playhead = document.createElement('div');
+      playhead.className = 'pointer-events-none absolute top-0 z-10 w-px bg-beet';
+      playhead.style.boxShadow = '0 0 6px rgba(92,46,58,0.35)';
+      playhead.style.display = 'none';
+      lanesWrap.appendChild(playhead);
+
+      tracksEl.appendChild(lanesWrap);
+    }
+
+    function updateButtons() {
+      var soloAny = TRACKS.some(function (t) { return t.soloed; });
+      TRACKS.forEach(function (t) {
+        // mute
+        t.el.mute.style.background = t.muted ? '#8f3a48' : '';
+        t.el.mute.style.color = t.muted ? '#fff' : '';
+        t.el.mute.style.borderColor = t.muted ? '#8f3a48' : '';
+        // solo
+        t.el.solo.style.background = t.soloed ? '#a87c38' : '';
+        t.el.solo.style.color = t.soloed ? '#fff' : '';
+        t.el.solo.style.borderColor = t.soloed ? '#a87c38' : '';
+        // dim lane if currently inaudible
+        var audible = soloAny ? t.soloed : !t.muted;
+        t.audible = audible;
+        t.el.lane.style.opacity = audible ? '1' : '0.4';
+      });
+    }
+
+    // ---------- Audio graph ----------
+    function ensureCtx() {
+      if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      master = ctx.createGain();
+      master.gain.value = 0.9;
+      master.connect(ctx.destination);
+
+      // white-noise buffer for drums
+      noiseBuf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+      var d = noiseBuf.getChannelData(0);
+      for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+
+      // per-track gain -> analyser -> master  (analyser drives the meters)
+      TRACKS.forEach(function (t) {
+        t.gain = ctx.createGain();
+        t.gain.gain.value = t.volume;
+        t.analyser = ctx.createAnalyser();
+        t.analyser.fftSize = 256;
+        t._buf = new Uint8Array(t.analyser.frequencyBinCount);
+        t.gain.connect(t.analyser);
+        t.analyser.connect(master);
+      });
+      applyGains();
+    }
+
+    function applyGains() {
+      var soloAny = TRACKS.some(function (t) { return t.soloed; });
+      var now = ctx ? ctx.currentTime : 0;
+      TRACKS.forEach(function (t) {
+        var audible = soloAny ? t.soloed : !t.muted;
+        var target = audible ? t.volume : 0;
+        if (t.gain) t.gain.gain.setTargetAtTime(target, now, 0.02);
+      });
+      updateButtons();
+    }
+
+    // ---------- Synth voices ----------
+    function regEnv(g, oscs, stopAt) {
+      activeEnvs.push(g);
+      var done = function () {
+        var i = activeEnvs.indexOf(g); if (i >= 0) activeEnvs.splice(i, 1);
+      };
+      if (oscs && oscs.length) oscs[0].onended = done; else setTimeout(done, (stopAt - ctx.currentTime + 0.05) * 1000);
+    }
+
+    function vDrumKick(t, out) {
+      var o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(48, t + 0.12);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(1, t + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+      o.connect(g); g.connect(out); o.start(t); o.stop(t + 0.22); regEnv(g, [o]);
+    }
+    function vDrumSnare(t, out) {
+      var n = ctx.createBufferSource(); n.buffer = noiseBuf;
+      var bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1900; bp.Q.value = 0.7;
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.55, t + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+      n.connect(bp); bp.connect(g); g.connect(out); n.start(t); n.stop(t + 0.2); regEnv(g, [n]);
+    }
+    function vDrumHat(t, out) {
+      var n = ctx.createBufferSource(); n.buffer = noiseBuf;
+      var hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 7000;
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.22, t + 0.003); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
+      n.connect(hp); hp.connect(g); g.connect(out); n.start(t); n.stop(t + 0.08); regEnv(g, [n]);
+    }
+    function vBass(t, out, freq, dur) {
+      var o = ctx.createOscillator(), lp = ctx.createBiquadFilter(), g = ctx.createGain();
+      o.type = 'sawtooth'; o.frequency.value = freq;
+      lp.type = 'lowpass'; lp.frequency.value = 520; lp.Q.value = 1;
+      g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.5, t + 0.02);
+      g.gain.setTargetAtTime(0.0001, t + dur, 0.07);
+      o.connect(lp); lp.connect(g); g.connect(out); o.start(t); o.stop(t + dur + 0.3); regEnv(g, [o]);
+    }
+    function vPad(t, out, freqs, dur) {
+      freqs.forEach(function (freq) {
+        var o1 = ctx.createOscillator(), o2 = ctx.createOscillator();
+        var lp = ctx.createBiquadFilter(), g = ctx.createGain();
+        o1.type = 'sawtooth'; o2.type = 'sawtooth';
+        o1.frequency.value = freq; o2.frequency.value = freq; o2.detune.value = 7;
+        lp.type = 'lowpass'; lp.frequency.value = 1500;
+        g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.12, t + 0.3);
+        g.gain.setTargetAtTime(0.0001, t + dur, 0.25);
+        o1.connect(lp); o2.connect(lp); lp.connect(g); g.connect(out);
+        o1.start(t); o2.start(t); o1.stop(t + dur + 0.6); o2.stop(t + dur + 0.6); regEnv(g, [o1]);
+      });
+    }
+    function vKeys(t, out, freq, dur) {
+      var o = ctx.createOscillator(), lp = ctx.createBiquadFilter(), g = ctx.createGain();
+      o.type = 'triangle'; o.frequency.value = freq;
+      lp.type = 'lowpass'; lp.frequency.value = 2400;
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.22, t + 0.005);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(lp); lp.connect(g); g.connect(out); o.start(t); o.stop(t + dur + 0.1); regEnv(g, [o]);
+    }
+    function vVocal(t, out, freq, dur) {
+      var o = ctx.createOscillator(), g = ctx.createGain();
+      var f1 = ctx.createBiquadFilter(), f2 = ctx.createBiquadFilter();
+      var lfo = ctx.createOscillator(), lfoG = ctx.createGain();
+      o.type = 'sawtooth'; o.frequency.value = freq;
+      f1.type = 'bandpass'; f1.frequency.value = 700; f1.Q.value = 8;
+      f2.type = 'bandpass'; f2.frequency.value = 1100; f2.Q.value = 10;
+      lfo.type = 'sine'; lfo.frequency.value = 5; lfoG.gain.value = freq * 0.012;
+      lfo.connect(lfoG); lfoG.connect(o.frequency);
+      g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.3, t + 0.08);
+      g.gain.setTargetAtTime(0.0001, t + dur, 0.12);
+      o.connect(f1); o.connect(f2); f1.connect(g); f2.connect(g); g.connect(out);
+      o.start(t); lfo.start(t); o.stop(t + dur + 0.3); lfo.stop(t + dur + 0.3); regEnv(g, [o]);
+    }
+
+    function gainOf(id) { for (var i = 0; i < TRACKS.length; i++) if (TRACKS[i].id === id) return TRACKS[i].gain; }
+
+    // ---------- Synth scheduler ----------
+    function scheduleStep(stepAbs, time) {
+      var loopStep = ((stepAbs % TOTAL_STEPS) + TOTAL_STEPS) % TOTAL_STEPS;
+      var bar = Math.floor(loopStep / STEPS_PER_BAR);
+      var s = loopStep % STEPS_PER_BAR;
+      var ch = CHORDS[bar % CHORDS.length];
+
+      // Drums
+      if (s % 4 === 0) vDrumKick(time, gainOf('drums'));
+      if (s === 4 || s === 12) vDrumSnare(time, gainOf('drums'));
+      if (s % 4 === 2) vDrumHat(time, gainOf('drums'));
+      // Bass
+      if (s === 0) vBass(time, gainOf('bass'), mtof(ch.bass), 0.55);
+      else if (s === 8) vBass(time, gainOf('bass'), mtof(ch.bass), 0.35);
+      else if (s === 14) vBass(time, gainOf('bass'), mtof(ch.bass + 7), 0.14);
+      // Synth pad (sustained, once per bar)
+      if (s === 0) vPad(time, gainOf('pad'), ch.pad.map(mtof), STEP * STEPS_PER_BAR - 0.1);
+      // Keys (arpeggio on the off-eighths)
+      if (s % 2 === 0) vKeys(time, gainOf('keys'), mtof(ch.pad[(s / 2) % ch.pad.length] + 12), 0.16);
+      // Vocal lead motif
+      if (s === 0) vVocal(time, gainOf('vocal'), mtof(ch.lead[0]), 0.5);
+      else if (s === 6) vVocal(time, gainOf('vocal'), mtof(ch.lead[2]), 0.45);
+      else if (s === 10) vVocal(time, gainOf('vocal'), mtof(ch.lead[1]), 0.45);
+      else if (s === 12) vVocal(time, gainOf('vocal'), mtof(ch.lead[0]), 0.5);
+    }
+
+    function schedulerTick() {
+      var lookahead = 0.12;
+      while (nextStepTime < ctx.currentTime + lookahead) {
+        scheduleStep(stepCounter, nextStepTime);
+        stepCounter++;
+        nextStepTime += STEP;
+      }
+    }
+
+    function startScheduler(fromPos) {
+      stepCounter = Math.ceil(fromPos / STEP);
+      nextStepTime = startTime + stepCounter * STEP;
+      if (nextStepTime < ctx.currentTime) nextStepTime = ctx.currentTime;
+      schedulerTick();
+      schedTimer = setInterval(schedulerTick, 25);
+    }
+
+    function stopSynthVoices() {
+      var now = ctx.currentTime;
+      activeEnvs.slice().forEach(function (g) {
+        try { g.gain.cancelScheduledValues(now); g.gain.setTargetAtTime(0.0001, now, 0.03); } catch (e) {}
+      });
+      activeEnvs.length = 0;
+    }
+
+    // ---------- Buffer engine (real stems) ----------
+    // First sample that rises above silence — used to strip AAC encoder
+    // priming (leading silence) so loops are gapless. Searched only within
+    // the first 120 ms, which is longer than any encoder delay.
+    function detectOnset(buf, sr) {
+      var data = buf.getChannelData(0);
+      var maxSearch = Math.min(data.length, Math.floor(0.12 * sr));
+      for (var i = 0; i < maxSearch; i++) { if (Math.abs(data[i]) > 0.01) return i; }
+      return 0;
+    }
+
+    function loadBuffers() {
+      elEngine.textContent = 'Loading stems…';
+      var loopSec = (BARS * 4) * (60 / BPM);   // exact musical length of the loop
+      return Promise.all(TRACKS.map(function (t) {
+        return fetch(t.src).then(function (r) { return r.arrayBuffer(); })
+          .then(function (ab) { return ctx.decodeAudioData(ab); })
+          .then(function (buf) { t._decoded = buf; });
+      })).then(function () {
+        var sr = TRACKS[0]._decoded.sampleRate;
+        var loopSamples = Math.round(loopSec * sr);
+        // Detect priming/onset on the drums and apply the SAME offset to every
+        // stem, so AAC delay is removed without breaking inter-stem alignment.
+        var offset = detectOnset(TRACKS[0]._decoded, sr);
+        TRACKS.forEach(function (t) {
+          var src = t._decoded, n = src.numberOfChannels;
+          var trimmed = ctx.createBuffer(n, loopSamples, sr);
+          for (var c = 0; c < n; c++) {
+            var from = src.getChannelData(c);
+            var copy = Math.max(0, Math.min(loopSamples, from.length - offset));
+            trimmed.getChannelData(c).set(from.subarray(offset, offset + copy));
+          }
+          t.buffer = trimmed; t._decoded = null;   // exact one-bar-loop buffer
+        });
+        songLen = loopSamples / sr;
+        elLen.textContent = fmt(songLen);
+      });
+    }
+    function startBuffers(fromPos) {
+      TRACKS.forEach(function (t) {
+        var src = ctx.createBufferSource();
+        src.buffer = t.buffer; src.loop = true;
+        src.connect(t.gain); src.start(ctx.currentTime + 0.03, fromPos % songLen);
+        t._src = src;
+      });
+    }
+    function stopBuffers() {
+      TRACKS.forEach(function (t) { if (t._src) { try { t._src.stop(); } catch (e) {} t._src = null; } });
+    }
+
+    var buffersPromise = null;
+    function ensureBuffers() { if (!buffersPromise) buffersPromise = loadBuffers(); return buffersPromise; }
+
+    // ---------- Lane visuals ----------
+    function fillCells(clipEl, values, accent) {
+      clipEl.innerHTML = '';
+      values.forEach(function (v) {
+        var cell = document.createElement('div');
+        cell.className = 'daw-cell';
+        cell.style.height = Math.max(4, v * 100) + '%';
+        cell.style.background = accent;
+        cell.style.opacity = v > 0.02 ? '0.85' : '0.15';
+        clipEl.appendChild(cell);
+      });
+    }
+
+    function peaksFromBuffer(buf, n) {
+      var ch0 = buf.getChannelData(0);
+      var ch1 = buf.numberOfChannels > 1 ? buf.getChannelData(1) : null;
+      var block = Math.floor(ch0.length / n);
+      var step = Math.max(1, Math.floor(block / 16));
+      var peaks = [], max = 0.0001;
+      for (var i = 0; i < n; i++) {
+        var p = 0, start = i * block, end = start + block;
+        for (var j = start; j < end; j += step) {
+          var a = Math.abs(ch0[j]); if (ch1) { var b = Math.abs(ch1[j]); if (b > a) a = b; }
+          if (a > p) p = a;
+        }
+        peaks.push(p); if (p > max) max = p;
+      }
+      return peaks.map(function (v) { return Math.pow(v / max, 0.8); }); // perceptual curve
+    }
+
+    function renderWaveforms() {
+      TRACKS.forEach(function (t) {
+        if (t.buffer && t.el.clip) fillCells(t.el.clip, peaksFromBuffer(t.buffer, 96), t.accent);
+      });
+    }
+
+    // ---------- Transport ----------
+    function curPos() {
+      var p = isPlaying ? (ctx.currentTime - startTime) : pausedPos;
+      return ((p % songLen) + songLen) % songLen;
+    }
+
+    function play() {
+      ensureCtx();
+      var begin = function () {
+        startTime = ctx.currentTime - pausedPos;
+        if (engine === 'buffer') startBuffers(pausedPos); else startScheduler(pausedPos);
+        isPlaying = true; setPlayIcon(true);
+        if (!rafId) renderLoop();
+      };
+      if (engine === 'buffer') { ensureBuffers().then(begin); } else { begin(); }
+    }
+
+    function pause() {
+      pausedPos = curPos();
+      isPlaying = false; setPlayIcon(false);
+      if (engine === 'buffer') stopBuffers(); else { clearInterval(schedTimer); stopSynthVoices(); }
+    }
+
+    function stop() {
+      pause();
+      pausedPos = 0;
+      elCur.textContent = fmt(0);
+      if (playhead) playhead.style.display = 'none';
+      TRACKS.forEach(function (t) { t.meter = 0; t.el.meter.style.width = '0'; });
+    }
+
+    function toggle() { if (isPlaying) pause(); else play(); }
+
+    function seekTo(pos) {
+      pos = Math.max(0, Math.min(songLen - 0.001, pos));
+      pausedPos = pos;
+      if (isPlaying) {
+        startTime = ctx.currentTime - pos;
+        if (engine === 'buffer') { stopBuffers(); startBuffers(pos); }
+        else { clearInterval(schedTimer); stopSynthVoices(); startScheduler(pos); }
+      }
+      elCur.textContent = fmt(pos);
+      updatePlayhead(pos);
+    }
+
+    function seekFromLane(e, lane) {
+      var rect = lane.getBoundingClientRect();
+      var ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+      ensureCtx();
+      seekTo(ratio * songLen);
+    }
+
+    // ---------- Render loop ----------
+    function updatePlayhead(pos) {
+      if (!laneRef || !lanesWrap) return;
+      var lr = laneRef.getBoundingClientRect(), wr = lanesWrap.getBoundingClientRect();
+      var x = (lr.left - wr.left) + (pos / songLen) * lr.width;
+      playhead.style.display = 'block';
+      playhead.style.height = wr.height + 'px';
+      playhead.style.transform = 'translateX(' + x + 'px)';
+    }
+
+    function renderLoop() {
+      var pos = curPos();
+      if (isPlaying) {
+        elCur.textContent = fmt(pos);
+        updatePlayhead(pos);
+        // meters from analysers
+        TRACKS.forEach(function (t) {
+          if (!t.analyser) return;
+          t.analyser.getByteTimeDomainData(t._buf);
+          var sum = 0;
+          for (var i = 0; i < t._buf.length; i++) { var v = (t._buf[i] - 128) / 128; sum += v * v; }
+          var rms = Math.sqrt(sum / t._buf.length);
+          var level = Math.min(1, rms * 3.2);
+          t.meter = Math.max(level, t.meter * 0.82);
+          t.el.meter.style.width = (t.meter * 100).toFixed(0) + '%';
+        });
+        rafId = requestAnimationFrame(renderLoop);
+      } else {
+        rafId = null;
+      }
+    }
+
+    // ---------- Helpers / init ----------
+    function fmt(s) {
+      s = Math.max(0, Math.floor(s || 0));
+      var m = Math.floor(s / 60), r = s % 60;
+      return m + ':' + (r < 10 ? '0' : '') + r;
+    }
+    function setPlayIcon(playing) {
+      iconPlay.classList.toggle('hidden', playing);
+      iconPause.classList.toggle('hidden', !playing);
+      playBtn.setAttribute('aria-label', playing ? 'Pause' : 'Play');
+    }
+
+    playBtn.addEventListener('click', toggle);
+    stopBtn.addEventListener('click', stop);
+    window.addEventListener('resize', function () { if (isPlaying || pausedPos) updatePlayhead(curPos()); });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // choose engine
+    engine = TRACKS.every(function (t) { return t.src; }) ? 'buffer' : 'synth';
+    songLen = (engine === 'buffer') ? 0 : SONG_LEN;
+
+    buildRuler();
+    buildTracks();
+
+    if (engine === 'buffer') {
+      elLen.textContent = '0:00';
+      elEngine.textContent = 'Loading stems…';
+      ensureCtx();                       // created suspended; decodes without a gesture
+      ensureBuffers().then(function () {
+        renderWaveforms();
+        elEngine.textContent = '5 stems · ' + BPM + ' BPM · B♭ minor';
+      }).catch(function () {             // fall back to the live synth demo
+        engine = 'synth'; songLen = SONG_LEN;
+        elLen.textContent = fmt(SONG_LEN);
+        TRACKS.forEach(function (t) { fillCells(t.el.clip, t.clip, t.accent); });
+        elEngine.textContent = 'Live demo stems · ' + BPM + ' BPM';
+      });
+    } else {
+      elLen.textContent = fmt(SONG_LEN);
+      TRACKS.forEach(function (t) { fillCells(t.el.clip, t.clip, t.accent); });
+      elEngine.textContent = 'Live demo stems · ' + BPM + ' BPM · Am–F–C–G';
+    }
+
+    // Reveal-on-scroll
+    var targets = document.querySelectorAll('.fade-target');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            var d = parseInt(en.target.getAttribute('data-delay') || '0', 10);
+            setTimeout(function () { en.target.classList.add('is-visible'); }, d);
+            io.unobserve(en.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      targets.forEach(function (el) { io.observe(el); });
+    } else {
+      targets.forEach(function (el) { el.classList.add('is-visible'); });
+    }
+  })();
+  </script>
+
+</body>
+</html>
